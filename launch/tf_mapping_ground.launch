@@ -1,0 +1,63 @@
+﻿<!-- -->
+<launch>
+
+  <!-- send table.xml to param server -->
+  <arg name="parent_frame" default="/odom" />
+  <arg name="child_frame" default="/base_link" />
+  <!-- <arg name="child_frame" default="velodyne" /> -->
+  <arg name="points_topic" default="/velodyne_points" />
+  <arg name="ground_points_topic" default="/points_ground" />
+  <arg name="output_dir" default="/home/ren/knowmeking/veloData/0730_data/" />
+  <arg name="save_bin" default="true" />
+  <arg name="pose_filename" default="/home/ren/knowmeking/veloData/0730_data/0730_1.txt" />
+
+  <node pkg="lvins" type="scan2mapping_imu_odom" name="tf_mapping" output="screen">
+    <param name="parent_frame" value="$(arg parent_frame)" />
+    <param name="child_frame" value="$(arg child_frame)" />
+    <param name="points_topic" value="$(arg points_topic)" />
+    <param name="ground_points_topic" value="$(arg ground_points_topic)" />
+    <param name="output_dir" value="$(arg output_dir)" />
+  </node>
+
+<!--  <node pkg="lvins" type="save_bin" name="save_bin" output="screen">
+      <param name="parent_frame" value="$(arg parent_frame)" />
+      <param name="child_frame" value="$(arg child_frame)" />
+      <param name="points_topic" value="$(arg points_topic)" />
+      <param name="output_dir" value="$(arg output_dir)" />
+      <param name="save_bin" value="$(arg save_bin)" />
+      <param name="pose_filename" value="$(arg pose_filename)" />
+  </node>-->
+
+  <include file="$(find lvins)/launch/lvins.launch" />
+
+    <arg name="point_topic" default="/velodyne_points" />
+    <arg name="remove_floor" default="true" />
+    <arg name="sensor_model" default="16" />
+    <arg name="sensor_height" default="0.8" />
+    <arg name="max_slope" default="20" /> <!--最大角度 越小，则地面要求越严格-->
+    <arg name="points_distance" default="0.05" />
+    <arg name="min_point" default="3" />
+    <arg name="min_intensity" default="0.0" />
+    <arg name="max_intensity" default="0.0" />
+    <arg name="clipping_thres" default="-0.5" /> <!-- -0.5 越小，则地面要求越严格 -->
+    <arg name="gap_thres" default="0.5" /> <!--距离设置，越小，则地面要求越严格 -->
+    <arg name="no_ground_point_topic" default="/points_no_ground" />
+    <arg name="ground_point_topic" default="/points_ground" />
+
+    <!-- rosrun lidar_tracker ground_filter -->
+    <node pkg="points_preprocessor" type="ground_filter" name="ground_filter"  output="screen">
+            <param name="point_topic" value="$(arg point_topic)" />
+            <param name="remove_floor" value="$(arg remove_floor)" />
+            <param name="sensor_model" value="$(arg sensor_model)" />
+            <param name="sensor_height" value="$(arg sensor_height)" />
+            <param name="max_slope" value="$(arg max_slope)" />
+            <param name="points_distance" value="$(arg points_distance)" />
+            <param name="min_point" value="$(arg min_point)" />
+            <param name="min_intensity" value="$(arg min_intensity)" />
+            <param name="max_intensity" value="$(arg max_intensity)" />
+            <param name="clipping_thres" value="$(arg clipping_thres)" />
+            <param name="gap_thres" value="$(arg gap_thres)" />
+            <param name="no_ground_point_topic" value="$(arg no_ground_point_topic)" />
+            <param name="ground_point_topic" value="$(arg ground_point_topic)" />
+    </node>
+</launch>

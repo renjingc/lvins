@@ -1,0 +1,21 @@
+﻿<!-- -->
+<launch>
+    <param name="use_sim_time" value="false" />
+    <!-- send table.xml to param server -->
+    <arg name="parent_frame" default="/odom" />
+    <arg name="child_frame" default="/base_link" />
+    <!-- <arg name="child_frame" default="velodyne" /> -->
+    <arg name="points_topic" default="/velodyne_points" />
+    <arg name="ground_points_topic" default="/points_ground" />
+    <arg name="output_dir" default="" />
+
+    <node pkg="lvins" type="scan2mapping_imu_odom" name="tf_mapping" output="screen">
+      <param name="parent_frame" value="$(arg parent_frame)" />
+      <param name="child_frame" value="$(arg child_frame)" />
+      <param name="points_topic" value="$(arg points_topic)" />
+      <param name="ground_points_topic" value="$(arg ground_points_topic)" />
+      <param name="output_dir" value="$(arg output_dir)" />
+    </node>
+
+    <include file="$(find lvins)/launch/lvins.launch" />
+</launch>

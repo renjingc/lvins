@@ -1,0 +1,27 @@
+﻿<launch>
+
+  <arg name="rviz" default="true" />   <!-- 是否显示rviz -->
+
+  <arg name="points_topic" default="/velodyne_points" />    <!--激光 topic -->
+  <arg name="odom_topic" default="/odom_pose" />    <!--odom topic -->
+  <arg name="imu_topic" default="/imu/data" />      <!--imu topic -->
+  <arg name="parent_frame" default="/odom" />
+  <arg name="child_frame" default="/base_link" />
+
+<!--  <node pkg="tf" type="static_transform_publisher" name="link2_broadcaster" args="0 0 0 0 0 0 1 base_link rslidar 10" />
+  <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0 0 0 0 1 base_link imu 10" />    -->
+
+  <node pkg="lvins" type="scan2scan_imu_odom" name="scan2scan_imu_odom" output="screen">
+      <param name="points_topic" value="$(arg points_topic)" />
+      <param name="odom_topic" value="$(arg odom_topic)" />
+      <param name="imu_topic" value="$(arg imu_topic)" />
+      <param name="parent_frame" value="$(arg parent_frame)" />
+      <param name="child_frame" value="$(arg child_frame)" />
+  </node>
+
+
+  <group if="$(arg rviz)">
+    <node launch-prefix="nice" pkg="rviz" type="rviz" name="rviz" args="-d $(find lvins)/rviz_cfg/lvins.rviz" />
+  </group>
+
+</launch>

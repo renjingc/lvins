@@ -1,0 +1,14 @@
+﻿<!-- -->
+<launch>
+
+  <arg name="pcd_filename" default="/home/ren/veloData/pcd/0318/pcd_filename10.pcd" />
+  <arg name="rviz" default="true" />
+
+  <!-- rosrun ndt_localizer ndt_mapping  -->
+  <node pkg="ndt_localizer" type="map_read" name="map_read_all" output="screen">
+    <param name="pcd_filename" value="$(arg pcd_filename)" />
+  </node>
+  <group if="$(arg rviz)">
+    <node launch-prefix="nice" pkg="rviz" type="rviz" name="rviz" args="-d $(find ndt_localizer)/rviz_cfg/ndt.rviz" />
+  </group>
+</launch>

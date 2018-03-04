@@ -1,0 +1,21 @@
+﻿<launch>
+    <arg name="parent_frame" default="/odom" />
+    <arg name="child_frame" default="/base_link" />
+    <!-- <arg name="child_frame" default="velodyne" /> -->
+    <arg name="points_topic" default="/velodyne_points" />
+    <arg name="output_dir" default="/home/ren/knowmeking/veloData/0730_data/" />
+    <arg name="save_bin" default="true" />
+    <arg name="pose_filename" default="/home/ren/knowmeking/veloData/0730_data/0730.txt" />
+
+    <node pkg="lvins" type="save_bin" name="save_bin" output="screen">
+        <param name="parent_frame" value="$(arg parent_frame)" />
+        <param name="child_frame" value="$(arg child_frame)" />
+        <param name="points_topic" value="$(arg points_topic)" />
+        <param name="output_dir" value="$(arg output_dir)" />
+        <param name="save_bin" value="$(arg save_bin)" />
+        <param name="pose_filename" value="$(arg pose_filename)" />
+    </node>
+
+    <include file="$(find ndt_localizer)/launch/ndt_mapping_imu_odom.launch" />
+
+</launch>
